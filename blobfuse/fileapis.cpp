@@ -46,9 +46,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     std::cout << "PATH: " << path << std::endl;
     int res;
 
-    res = open(path, fi->flags);
-    if (res == -1)
-        return -errno;
+    res = 1;
 
     fi->fh = res;
     return 0;
