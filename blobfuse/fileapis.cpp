@@ -1,6 +1,6 @@
 #include "blobfuse.h"
 #include <sys/file.h>
-#include <iostream>
+#include <cstring>
 
 file_lock_map* file_lock_map::get_instance()
 {
@@ -43,10 +43,9 @@ std::mutex deque_lock;
 // The variables "mntPath" and "mntPathString" refer to on-disk cached location of the corresponding file/blob.
 int azs_open(const char *path, struct fuse_file_info *fi)
 {
-    std::cout << "PATH: " << path << std::endl;
     int res;
 
-    res = 1;
+    res = 2;
 
     fi->fh = res;
     return 0;
@@ -68,9 +67,13 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
     int fd = ((struct fhwrapper *)fi->fh)->fh;
 
     errno = 0;
-    int res = pread(fd, buf, size, offset);
-    if (res == -1)
-        res = -errno;
+    concurrency::streams::container_buffer<std::vector<char>> buffer;
+    concurrency::streams::ostream out_stream(buffer);
+    blob.download_range_to_stream(out_stream, offset, size);
+
+    auto data = buffer.collection();
+
+    memcpy(buf, data.data(), data.size());
 
     return res;
 }
