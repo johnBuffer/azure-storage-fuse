@@ -31,8 +31,6 @@
 #include <stddef.h>
 #include "blob/blob_client.h"
 
-#define UNREFERENCED_PARAMETER(p) (p)
-
 /* Define errors and return codes */
 #define D_NOTEXIST -1
 #define D_EMPTY 0

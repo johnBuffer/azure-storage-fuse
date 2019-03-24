@@ -70,14 +70,14 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 {
     int fd = ((struct fhwrapper *)fi->fh)->fh;
 
-    errno = 0;
+    int errno = 0;
     concurrency::streams::container_buffer<std::vector<char>> buffer;
     concurrency::streams::ostream out_stream(buffer);
-    blob.download_range_to_stream(out_stream, offset, size);
+    /*blob.download_range_to_stream(out_stream, offset, size);
 
     auto data = buffer.collection();
 
-    memcpy(buf, data.data(), data.size());
+    memcpy(buf, data.data(), data.size());*/
 
     return res;
 }
