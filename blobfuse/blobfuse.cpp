@@ -225,7 +225,7 @@ void print_version()
     fprintf(stdout, "blobfuse 1.0.2\n");
 }
 
-int set_log_mask(const char * min_log_level_char)
+int set_log_mask(const char *min_log_level_char)
 {
     if (!min_log_level_char)
     {

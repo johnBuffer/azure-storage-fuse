@@ -1,6 +1,10 @@
 #include "blobfuse.h"
 #include <sys/file.h>
 #include <cstring>
+#include <was/storage_account.h>
+#include <was/blob.h>
+#include <cpprest/filestream.h>
+#include <cpprest/containerstream.h>
 
 file_lock_map* file_lock_map::get_instance()
 {
