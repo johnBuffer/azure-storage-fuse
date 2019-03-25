@@ -74,11 +74,11 @@ int azs_open(const char *path, struct fuse_file_info *fi)
         myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Got blob.\n";
         myfile.close();
-        fhwrap->blob.download_attributes();
+        /*fhwrap->blob.download_attributes();
 
         myfile.open ("/home/jean/debug.lol");
         myfile << "Got attrib.\n";
-        myfile.close();
+        myfile.close();*/
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
         myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
@@ -142,6 +142,9 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
         concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
         concurrency::streams::ostream out_stream(buffer);
         fw->blob.download_range_to_stream(out_stream, offset, to_dl);
+
+        fw->blob.download_to_file("/home/jean/okokokok.txt");
+
         auto data = buffer.collection();
         memcpy(fw->cache.data(), data.data(), data.size());
     }
