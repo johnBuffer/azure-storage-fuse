@@ -104,6 +104,9 @@ struct fhwrapper
 {
     int fh; // The handle to the file in the file cache to use for read/write operations.
     bool upload; // True if the blob should be uploaded when the file is closed.  (False when the file was opened in read-only mode.)
+
+
+
     fhwrapper(int fh, bool upload) : fh(fh), upload(upload)
     {
 
@@ -132,6 +135,9 @@ extern int default_permission;
 // This is used to make all the calls to Storage
 // The C++ lite client does not store state, other than connection info, so we can use it between calls without issue.
 extern std::shared_ptr<blob_client_wrapper> azure_blob_client_wrapper;
+
+// Client Azure for full streaming
+extern std::shared_ptr<azure::storage::cloud_storage_account> streaming_client_wrapper;
 
 // Used to map HTTP errors (ex. 404) to Linux errno (ex ENOENT)
 extern std::map<int, int> error_mapping;
