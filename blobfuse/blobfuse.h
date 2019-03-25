@@ -31,6 +31,11 @@
 #include <stddef.h>
 #include "blob/blob_client.h"
 
+#include <was/storage_account.h>
+#include <was/blob.h>
+#include <cpprest/filestream.h>
+#include <cpprest/containerstream.h>
+
 /* Define errors and return codes */
 #define D_NOTEXIST -1
 #define D_EMPTY 0
