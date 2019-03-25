@@ -187,7 +187,7 @@ void *azs_init(struct fuse_conn_info *conn)
                                                                                                                     str_options.blobEndpoint));
     
     azure::storage::storage_credentials credentials(str_options.accountName, str_options.accountKey);
-    streaming_client_wrapper = std::make_shared<azure::storage::cloud_storage_account>(credentials);
+    streaming_client_wrapper = std::make_shared<azure::storage::cloud_storage_account>(credentials, true);
 
     if(errno != 0)
     {
