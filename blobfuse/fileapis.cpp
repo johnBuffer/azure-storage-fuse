@@ -59,6 +59,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
 
         struct fhwrapper *fhwrap = new fhwrapper(0, false);
         fhwrap->blob = container.get_blob_reference(pathString.substr(1));
+        fhwrap->blob.download_attributes();
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
         return 0;
@@ -85,12 +86,30 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 {
     fhwrapper* fw = (fhwrapper*)fi->fh;
 
+    uint32_t file_size = fw->blob.properties().size();
+
     int res = 0;
-    concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
-    concurrency::streams::ostream out_stream(buffer);
-    fw->blob.download_range_to_stream(out_stream, offset, size);
-    auto data = buffer.collection();
-    memcpy(buf, data.data(), data.size());
+
+    int32_t start(offset - fw->cache_start);
+    if (start < 0 || fw->cache_size < start + size)
+    {
+        uint32_t rest = file_size - offset;
+
+        uint32_t to_dl = rest;
+        if (to_dl > 1000000)
+            to_dl = 1000000;
+
+        fw->cache_start = offset;
+        fw->cache_size  = to_dl;
+
+        concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
+        concurrency::streams::ostream out_stream(buffer);
+        fw->blob.download_range_to_stream(out_stream, offset, to_dl);
+        auto data = buffer.collection();
+        memcpy(fw->cache.data(), data.data(), data.size());
+    }
+    
+    memcpy(buf, fw->cache.data(), data.size());
 
     return res;
 }
