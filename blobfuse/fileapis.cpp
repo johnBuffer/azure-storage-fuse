@@ -66,7 +66,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     catch (const azure::storage::storage_exception& e)
     {
         // Cannot find file
-        return 1;
+        return -EACCES;
     }
 }
 
