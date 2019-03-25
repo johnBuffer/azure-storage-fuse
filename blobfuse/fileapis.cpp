@@ -74,21 +74,21 @@ int azs_open(const char *path, struct fuse_file_info *fi)
  */
 int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
-    int fd = ((struct fhwrapper *)fi->fh)->fh;
+    fhwrapper* fw = (fhwrapper*)fi->fh;
 
     //azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
 
     //const std::string pathString(path);
 
     int res = 0;
-    /*concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
+    concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
     concurrency::streams::ostream out_stream(buffer);
 
-    blob.download_range_to_stream(out_stream, offset, size);
+    fw->blob.download_range_to_stream(out_stream, offset, size);
 
     auto data = buffer.collection();
 
-    memcpy(buf, data.data(), data.size());*/
+    memcpy(buf, data.data(), data.size());
 
     return res;
 }
