@@ -43,6 +43,7 @@ std::mutex deque_lock;
 // The variables "mntPath" and "mntPathString" refer to on-disk cached location of the corresponding file/blob.
 int azs_open(const char *path, struct fuse_file_info *fi)
 {
+    return 1;
     try
     {
         int res;

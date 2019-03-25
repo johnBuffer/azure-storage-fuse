@@ -107,9 +107,11 @@ struct fhwrapper
 
     azure::storage::cloud_blob blob;
 
-    fhwrapper(int fh, bool upld) : fh(fh), upload(upld)
-    {
+    uint32_t cache_start, cache_size;
+    std::std::vector<uint8_t> cache(1000*1024);
 
+    fhwrapper(int fh, bool upld) : fh(fh), upload(upld), cache_start(0), cache_size(0)
+    {
     }
 };
 
