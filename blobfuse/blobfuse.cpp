@@ -185,6 +185,10 @@ void *azs_init(struct fuse_conn_info *conn)
 {
     azure_blob_client_wrapper = std::make_shared<blob_client_wrapper>(blob_client_wrapper::blob_client_wrapper_init(str_options.accountName, str_options.accountKey, str_options.sasToken, 20/*concurrency*/, str_options.use_https,
                                                                                                                     str_options.blobEndpoint));
+    
+    azure::storage::storage_credentials credentials(str_options.accountName, str_options.accountKey);
+    streaming_client_wrapper = std::make_shared<azure::storage::cloud_storage_account>(credentials);
+
     if(errno != 0)
     {
         syslog(LOG_CRIT, "azs_init - Unable to start blobfuse.  Creating blob client failed: errno = %d.\n", errno);
