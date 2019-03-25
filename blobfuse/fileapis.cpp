@@ -49,7 +49,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     try
     {
         std::ofstream myfile;
-        myfile.open ("/home/jean/debug.lol");
+        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Start open.\n";
         myfile.close();
 
@@ -57,21 +57,21 @@ int azs_open(const char *path, struct fuse_file_info *fi)
 
         azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
 
-        myfile.open("/home/jean/debug.lol");
+        myfile.open("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Created blob_client.\n";
         myfile.close();
 
         const std::string pathString(path);
         azure::storage::cloud_blob_container container(blob_client.get_container_reference(str_options.containerName));
 
-        myfile.open ("/home/jean/debug.lol");
+        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Git container.\n";
         myfile.close();
 
         struct fhwrapper *fhwrap = new fhwrapper(0, false);
         fhwrap->blob = container.get_blob_reference(pathString.substr(1));
 
-        myfile.open ("/home/jean/debug.lol");
+        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Got blob.\n";
         myfile.close();
         /*fhwrap->blob.download_attributes();
@@ -81,7 +81,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
         myfile.close();*/
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
-        myfile.open ("/home/jean/debug.lol");
+        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Open ok.\n";
         myfile.close();
 
@@ -90,7 +90,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     catch (const azure::storage::storage_exception& e)
     {
         std::ofstream myfile;
-        myfile.open ("/home/jean/debug.lol");
+        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Open failed.\n";
         myfile.close();
         // Cannot find file
@@ -112,13 +112,13 @@ int azs_open(const char *path, struct fuse_file_info *fi)
 int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
     std::ofstream myfile;
-    myfile.open ("/home/jean/debug.lol");
+    myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
     myfile << "Read " << size << " " << offset << std::endl;
     myfile.close();
 
     fhwrapper* fw = (fhwrapper*)fi->fh;
 
-    uint32_t file_size = fw->blob.properties().size();
+    uint32_t file_size = 400;//fw->blob.properties().size();
 
     if (offset >= file_size)
         return 0;
@@ -127,6 +127,10 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
     if (start < 0 || fw->cache_size < start + size)
     {
         uint32_t rest = file_size - offset;
+
+        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
+        myfile << "Rest to read " << rest << std::endl;
+        myfile.close();
 
         uint32_t to_dl = rest;
         if (to_dl > 1000000)
