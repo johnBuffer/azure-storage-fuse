@@ -43,22 +43,30 @@ std::mutex deque_lock;
 // The variables "mntPath" and "mntPathString" refer to on-disk cached location of the corresponding file/blob.
 int azs_open(const char *path, struct fuse_file_info *fi)
 {
-    int res;
+    try
+    {
+        int res;
 
-    azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
+        azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
 
-    const std::string pathString(path);
+        const std::string pathString(path);
 
-    concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
-    concurrency::streams::ostream out_stream(buffer);
+        concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
+        concurrency::streams::ostream out_stream(buffer);
 
-    azure::storage::cloud_blob_container container(blob_client.get_container_reference(str_options.containerName));
+        azure::storage::cloud_blob_container container(blob_client.get_container_reference(str_options.containerName));
 
-    struct fhwrapper *fhwrap = new fhwrapper(0, false);
-    fhwrap->blob = container.get_blob_reference(pathString.substr(1));
-    fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
+        struct fhwrapper *fhwrap = new fhwrapper(0, false);
+        fhwrap->blob = container.get_blob_reference(pathString.substr(1));
+        fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
-    return 0;
+        return 0;
+    }
+    catch (const azure::storage::storage_exception& e)
+    {
+        // Cannot find file
+        return 1;
+    }
 }
 
 // We don't use the 'path' parameter
@@ -76,18 +84,11 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 {
     fhwrapper* fw = (fhwrapper*)fi->fh;
 
-    //azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
-
-    //const std::string pathString(path);
-
     int res = 0;
     concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
     concurrency::streams::ostream out_stream(buffer);
-
     fw->blob.download_range_to_stream(out_stream, offset, size);
-
     auto data = buffer.collection();
-
     memcpy(buf, data.data(), data.size());
 
     return res;

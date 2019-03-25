@@ -107,7 +107,7 @@ struct fhwrapper
 
     azure::storage::cloud_blob blob;
 
-    fhwrapper(int fh, bool upld) : fh(fh), upload(upload)
+    fhwrapper(int fh, bool upld) : fh(fh), upload(upld)
     {
 
     }
