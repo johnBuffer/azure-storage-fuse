@@ -21,6 +21,7 @@
 #include <gcrypt.h>
 #include <pthread.h>
 #include <syslog.h>
+#include <vector>
 
 // Declare that we're using version 2.9 of FUSE
 // 3.0 is not built-in to many distros yet.
@@ -108,7 +109,7 @@ struct fhwrapper
     azure::storage::cloud_blob blob;
 
     uint32_t cache_start, cache_size;
-    std::std::vector<uint8_t> cache(1000*1024);
+    std::vector<uint8_t> cache(1000*1024);
 
     fhwrapper(int fh, bool upld) : fh(fh), upload(upld), cache_start(0), cache_size(0)
     {
