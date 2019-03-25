@@ -47,6 +47,8 @@ const struct fuse_opt option_spec[] =
 };
 
 std::shared_ptr<blob_client_wrapper> azure_blob_client_wrapper;
+std::shared_ptr<azure::storage::cloud_storage_account> streaming_client_wrapper;
+
 class gc_cache gc_cache;
 
 // Currently, the cpp lite lib puts the HTTP status code in errno.
