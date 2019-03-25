@@ -69,6 +69,8 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
     int res = 0;
     concurrency::streams::container_buffer<std::vector<char>> buffer;
     concurrency::streams::ostream out_stream(buffer);
+
+    std::string container_name = str_options.containerName;
     /*blob.download_range_to_stream(out_stream, offset, size);
 
     auto data = buffer.collection();
