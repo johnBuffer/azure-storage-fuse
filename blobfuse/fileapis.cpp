@@ -120,7 +120,8 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 
     uint32_t file_size = fw->blob.properties().size();
 
-    int res = 0;
+    if (offset >= file_size)
+        return 0;
 
     int32_t start(offset - fw->cache_start);
     if (start < 0 || fw->cache_size < start + size)
@@ -143,7 +144,7 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
     
     memcpy(buf, fw->cache.data(), fw->cache_size);
 
-    return res;
+    return fw->cache_size;
 }
 #pragma GCC diagnostic pop
 
