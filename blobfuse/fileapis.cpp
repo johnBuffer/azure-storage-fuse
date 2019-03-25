@@ -109,7 +109,7 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
         memcpy(fw->cache.data(), data.data(), data.size());
     }
     
-    memcpy(buf, fw->cache.data(), data.size());
+    memcpy(buf, fw->cache.data(), fw->cache_size);
 
     return res;
 }
