@@ -53,10 +53,9 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     concurrency::streams::ostream out_stream(buffer);
 
     azure::storage::cloud_blob_container container(blob_client.get_container_reference(str_options.containerName));
-    azure::storage::cloud_blob blob = container.get_blob_reference(pathString.substr(1));
 
     struct fhwrapper *fhwrap = new fhwrapper(0, false);
-    fhwrap->blob = std::make_unique<azure::storage::cloud_blob>(blob);
+    fhwrap->blob = container.get_blob_reference(pathString.substr(1));
     fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
     return 0;
