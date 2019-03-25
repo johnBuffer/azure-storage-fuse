@@ -111,6 +111,11 @@ int azs_open(const char *path, struct fuse_file_info *fi)
  */
 int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
+    std::ofstream myfile;
+    myfile.open ("/home/jean/debug.lol");
+    myfile << "Read " << size << " " << offset << std::endl;
+    myfile.close();
+
     fhwrapper* fw = (fhwrapper*)fi->fh;
 
     uint32_t file_size = fw->blob.properties().size();
