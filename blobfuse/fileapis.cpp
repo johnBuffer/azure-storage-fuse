@@ -57,16 +57,29 @@ int azs_open(const char *path, struct fuse_file_info *fi)
 
         azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
 
+        std::ofstream myfile;
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Created blob_client.\n";
+        myfile.close();
+
         const std::string pathString(path);
-
-        concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
-        concurrency::streams::ostream out_stream(buffer);
-
         azure::storage::cloud_blob_container container(blob_client.get_container_reference(str_options.containerName));
+        std::ofstream myfile;
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Git container.\n";
+        myfile.close();
 
         struct fhwrapper *fhwrap = new fhwrapper(0, false);
         fhwrap->blob = container.get_blob_reference(pathString.substr(1));
+        std::ofstream myfile;
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Got blob.\n";
+        myfile.close();
         fhwrap->blob.download_attributes();
+        std::ofstream myfile;
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Got attrib.\n";
+        myfile.close();
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
         myfile.open ("/home/jean/debug.lol");
