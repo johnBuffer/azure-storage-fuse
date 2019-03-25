@@ -74,11 +74,11 @@ int azs_open(const char *path, struct fuse_file_info *fi)
         myfile.open ("/home/jean/debug.lol");
         myfile << "Got blob.\n";
         myfile.close();
-        fhwrap->blob.download_attributes();
+        /*fhwrap->blob.download_attributes();
 
         myfile.open ("/home/jean/debug.lol");
         myfile << "Got attrib.\n";
-        myfile.close();
+        myfile.close();*/
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
         myfile.open ("/home/jean/debug.lol");
