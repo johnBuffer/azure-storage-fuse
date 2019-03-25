@@ -105,9 +105,9 @@ struct fhwrapper
     int fh; // The handle to the file in the file cache to use for read/write operations.
     bool upload; // True if the blob should be uploaded when the file is closed.  (False when the file was opened in read-only mode.)
 
+    std::unique_ptr<azure::storage::cloud_blob> blob;
 
-
-    fhwrapper(int fh, bool upload) : fh(fh), upload(upload)
+    fhwrapper(int fh, bool upld) : fh(fh), upload(upload)
     {
 
     }
