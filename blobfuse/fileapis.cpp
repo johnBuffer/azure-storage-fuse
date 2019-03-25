@@ -49,7 +49,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     try
     {
         std::ofstream myfile;
-        myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
+        myfile.open ("/home/jean/debug.lol", std::fstream::out);
         myfile << "Start open.\n";
         myfile.close();
 
@@ -74,11 +74,11 @@ int azs_open(const char *path, struct fuse_file_info *fi)
         myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
         myfile << "Got blob.\n";
         myfile.close();
-        /*fhwrap->blob.download_attributes();
+        fhwrap->blob.download_attributes();
 
         myfile.open ("/home/jean/debug.lol");
         myfile << "Got attrib.\n";
-        myfile.close();*/
+        myfile.close();
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
         myfile.open ("/home/jean/debug.lol", std::fstream::out | std::fstream::app);
@@ -118,7 +118,7 @@ int azs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 
     fhwrapper* fw = (fhwrapper*)fi->fh;
 
-    uint32_t file_size = 400;//fw->blob.properties().size();
+    uint32_t file_size = 465;//fw->blob.properties().size();
 
     if (offset >= file_size)
         return 0;
