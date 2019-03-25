@@ -77,6 +77,7 @@ int azs_open(const char *path, struct fuse_file_info *fi)
     }
     catch (const azure::storage::storage_exception& e)
     {
+        std::ofstream myfile;
         myfile.open ("/home/jean/debug.lol");
         myfile << "Open failed.\n";
         myfile.close();
