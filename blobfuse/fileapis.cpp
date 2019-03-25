@@ -2,6 +2,9 @@
 #include <sys/file.h>
 #include <cstring>
 
+#include <iostream>
+#include <fstream>
+
 file_lock_map* file_lock_map::get_instance()
 {
     if(nullptr == s_instance.get())
@@ -45,6 +48,11 @@ int azs_open(const char *path, struct fuse_file_info *fi)
 {
     try
     {
+        std::ofstream myfile;
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Start open.\n";
+        myfile.close();
+
         int res;
 
         azure::storage::cloud_blob_client blob_client = streaming_client_wrapper->create_cloud_blob_client();
@@ -61,10 +69,17 @@ int azs_open(const char *path, struct fuse_file_info *fi)
         fhwrap->blob.download_attributes();
         fi->fh = (long unsigned int)fhwrap; // Store the file handle for later use.
 
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Open ok.\n";
+        myfile.close();
+
         return 0;
     }
     catch (const azure::storage::storage_exception& e)
     {
+        myfile.open ("/home/jean/debug.lol");
+        myfile << "Open failed.\n";
+        myfile.close();
         // Cannot find file
         return -EACCES;
     }
